@@ -37,6 +37,24 @@ class Controlers {
       }
     );
   }
+  checkRegister(req, res) {
+    db.query(
+      `SELECT * FROM user WHERE user.email = "${req.body.email}"`,
+      (err, result) => {
+        if (result.length !== 0) {
+          console.log("Такой пользователь уже существует");
+          res.json({ message: "Ошибка" });
+        }
+      }
+    );
+    db.query(
+      `INSERT INTO user (id, name, email, password) VALUES ('','${req.body.name}','${req.body.email}','${req.body.password}')`,
+      (err, result) => {
+        console.log(result.insertId);
+        res.json({ id: result.insertId });
+      }
+    );
+  }
   getUser(req, res) {
     db.query(
       `SELECT * FROM user WHERE user.id = "${req.body.id}"`,
