@@ -18,6 +18,7 @@ app.post("/access", controllers.getAccess);
 app.post("/login", controllers.checkLogin)
 app.post("/user", controllers.getUser)
 app.put("/register", controllers.checkRegister)
+app.post("/password", controllers.changePassword)
 
 app.listen(process.env.PORT, () => {
   console.log(`Сервер запущен по ссылке http://localhost:${process.env.PORT}`);

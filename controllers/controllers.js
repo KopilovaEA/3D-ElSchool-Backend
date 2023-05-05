@@ -55,6 +55,16 @@ class Controlers {
       }
     );
   }
+  changePassword(req, res) {
+    console.log(req.body);
+    db.query(
+      `UPDATE user SET password='${req.body.password}' WHERE user.id=${req.body.id}`,
+      (err, result) => {
+        console.log(result);
+        res.json(result);
+      }
+    );
+  }
   getUser(req, res) {
     db.query(
       `SELECT * FROM user WHERE user.id = "${req.body.id}"`,
