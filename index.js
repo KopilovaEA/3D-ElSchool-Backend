@@ -14,11 +14,18 @@ app.use(
 
 app.get("/users", controllers.getUsers);
 app.get("/courses", controllers.getCourses);
+app.post("/courses", controllers.getUserCourses);
 app.post("/access", controllers.getAccess);
-app.post("/login", controllers.checkLogin)
-app.post("/user", controllers.getUser)
-app.put("/register", controllers.checkRegister)
-app.post("/password", controllers.changePassword)
+app.post("/login", controllers.checkLogin);
+app.post("/user", controllers.getUser);
+app.put("/register", controllers.checkRegister);
+app.post("/password", controllers.changePassword);
+app.post("/email", controllers.changeEmail);
+app.post("/name", controllers.changeName);
+app.post("/add_course_to_user", controllers.addFreeCourseToUser);
+app.post("/course_access", controllers.courseAccess);
+app.post("/admin", controllers.checkAdmin);
+app.post("/all_users", controllers.getAllUsers);
 
 app.listen(process.env.PORT, () => {
   console.log(`Сервер запущен по ссылке http://localhost:${process.env.PORT}`);
