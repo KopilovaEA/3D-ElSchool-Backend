@@ -8,7 +8,11 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL,
+    origin: [
+      process.env.CLIENT_URL_1,
+      process.env.CLIENT_URL_2,
+      process.env.CLIENT_URL_3,
+    ],
   })
 );
 
@@ -26,7 +30,9 @@ app.post("/add_course_to_user", controllers.addFreeCourseToUser);
 app.post("/course_access", controllers.courseAccess);
 app.post("/admin", controllers.checkAdmin);
 app.post("/all_users", controllers.getAllUsers);
+app.post("/add_course_access", controllers.addCourseAccess)
+app.post("/remove_access", controllers.removeCourseAccess)
 
 app.listen(process.env.PORT, () => {
-  console.log(`Сервер запущен по ссылке http://localhost:${process.env.PORT}`);
+  console.log(`Сервер запущен на порту ${process.env.PORT}!`);
 });

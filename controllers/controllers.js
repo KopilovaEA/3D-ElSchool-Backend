@@ -170,6 +170,58 @@ class Controlers {
       }
     );
   }
+  addCourseAccess(req, res) {
+    // проверяем есть ли пользователь с такой почтой
+    db.query(
+      `SELECT * FROM user WHERE user.email = "${req.body.email}"`,
+      (err, result) => {
+        console.log("@addCourseAccess user", result);
+        if (result.length !== 0) {
+          // нашли пользователя, проверяем нет ли у него уже доступа к этому курсу
+          const user_id = result[0].id;
+          db.query(
+            `SELECT * FROM user_course WHERE user_course.id_user = ${user_id} AND user_course.id_course = ${req.body.course_id}`,
+            (err, result) => {
+              if (result.length !== 0) {
+                // уже есть доступ
+                res
+                  .status(409)
+                  .json({ message: "У этого пользователя уже есть доступ" });
+              } else {
+                // иначе всё хорошо и мы даём доступ
+                db.query(
+                  `INSERT INTO user_course (id, id_user, id_course) VALUES ('',${user_id},${req.body.course_id})`,
+                  (err, result) => {
+                    console.log(result);
+                    res.status(201).json(result);
+                  }
+                );
+              }
+            }
+          );
+        } else {
+          // нет пользователя
+          res
+            .status(404)
+            .json({ message: "Такого пользователя нет в базе данных" });
+        }
+      }
+    );
+  }
+  removeCourseAccess(req, res) {
+    // сначала получим id курса по его title, чтобы удалить
+    db.query(
+      `SELECT * FROM course WHERE course.title = "${req.body.course_title}"`,
+      (err, result) => {
+        db.query(
+          `DELETE FROM user_course WHERE user_course.id_user = "${req.body.user_id}" AND user_course.id_course = "${result[0].id}"`,
+          (err, result) => {
+            res.status(200).json(result);
+          }
+        );
+      }
+    );
+  }
 }
 
 module.exports = new Controlers();
