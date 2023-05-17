@@ -41,13 +41,16 @@ class Controlers {
     db.query(
       `SELECT * FROM user WHERE user.email = "${req.body.email}"`,
       (err, result) => {
-        if (result.length !== 0) {
+        if (err || !result) {
           console.log("Такой пользователь уже существует");
           res.json({ message: "Ошибка" });
         } else {
+	  console.log(`req.body ${JSON.stringify(req.body, null, 2)}`);
           db.query(
-            `INSERT INTO user (id, name, email, password) VALUES ('','${req.body.name}','${req.body.email}','${req.body.password}')`,
+            `INSERT INTO user (role, name, email, password) VALUES ('${"user"}','${req.body.name}','${req.body.email}','${req.body.password}')`,
             (err, result) => {
+	      console.log("@err", err)
+	      console.log(`insert result ${result}`);
               console.log(result.insertId);
               res.json({ id: result.insertId });
             }
