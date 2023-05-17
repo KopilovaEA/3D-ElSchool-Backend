@@ -41,7 +41,7 @@ class Controlers {
     db.query(
       `SELECT * FROM user WHERE user.email = "${req.body.email}"`,
       (err, result) => {
-        if (err || !result) {
+        if (err || (result?.length && result.length !== 0 )) {
           console.log("Такой пользователь уже существует");
           res.json({ message: "Ошибка" });
         } else {
@@ -114,7 +114,7 @@ class Controlers {
           res.json({ id: result[0].id_course });
         } else {
           db.query(
-            `INSERT INTO user_course (id, id_user, id_course) VALUES ('',${req.body.user_id},${req.body.course_id})`,
+            `INSERT INTO user_course (id_user, id_course) VALUES (${req.body.user_id},${req.body.course_id})`,
             (err, result) => {
               console.log(result.insertId);
               res.json({ id: result.insertId });
@@ -193,7 +193,7 @@ class Controlers {
               } else {
                 // иначе всё хорошо и мы даём доступ
                 db.query(
-                  `INSERT INTO user_course (id, id_user, id_course) VALUES ('',${user_id},${req.body.course_id})`,
+                  `INSERT INTO user_course (id_user, id_course) VALUES (${user_id},${req.body.course_id})`,
                   (err, result) => {
                     console.log(result);
                     res.status(201).json(result);
