@@ -26,7 +26,7 @@ class Controlers {
     db.query(
       `SELECT * FROM user WHERE user.email = "${req.body.email}" AND user.password = "${req.body.password}"`,
       (err, result) => {
-        if (result.length === 0) {
+        if (err || (result?.length && result.length === 0 )) {
           console.log("Ничего не найдено");
           res.json({ message: "Ошибка" });
         } else {
@@ -93,7 +93,7 @@ class Controlers {
     db.query(
       `SELECT * FROM user WHERE user.id = "${req.body.id}"`,
       (err, result) => {
-        if (result.length === 0) {
+        if (err || (result?.length && result.length === 0 )) {
           console.log("Ничего не найдено");
           res.json({ message: "Ошибка" });
         } else {
@@ -109,7 +109,7 @@ class Controlers {
     db.query(
       `SELECT * FROM user_course WHERE user_course.id_user = ${req.body.user_id} AND user_course.id_course = ${req.body.course_id}`,
       (err, result) => {
-        if (result.length !== 0) {
+        if (result?.length !== 0) {
           console.log(result);
           res.json({ id: result[0].id_course });
         } else {
@@ -128,7 +128,7 @@ class Controlers {
     db.query(
       `SELECT * FROM user_course WHERE user_course.id_user = ${req.body.user_id} AND user_course.id_course = ${req.body.course_id}`,
       (err, result) => {
-        if (result.length !== 0) {
+        if (result?.length !== 0) {
           console.log(result);
           res.json({ id: result[0].id_course });
         } else {
@@ -159,7 +159,7 @@ class Controlers {
     db.query(
       `SELECT user.name FROM user WHERE user.id = ${req.body.id} AND role = 'admin';`,
       (err, result) => {
-        if (result.length !== 0) {
+        if (result?.length !== 0) {
           db.query(
             `SELECT user.id, user.email, user.name, course.title FROM user INNER JOIN user_course ON user_course.id_user = user.id INNER JOIN course ON user_course.id_course = course.id;`,
             (err, result) => {
@@ -179,13 +179,13 @@ class Controlers {
       `SELECT * FROM user WHERE user.email = "${req.body.email}"`,
       (err, result) => {
         console.log("@addCourseAccess user", result);
-        if (result.length !== 0) {
+        if (result?.length !== 0) {
           // нашли пользователя, проверяем нет ли у него уже доступа к этому курсу
           const user_id = result[0].id;
           db.query(
             `SELECT * FROM user_course WHERE user_course.id_user = ${user_id} AND user_course.id_course = ${req.body.course_id}`,
             (err, result) => {
-              if (result.length !== 0) {
+              if (result?.length !== 0) {
                 // уже есть доступ
                 res
                   .status(409)
