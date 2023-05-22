@@ -26,7 +26,7 @@ class Controlers {
     db.query(
       `SELECT * FROM user WHERE user.email = "${req.body.email}" AND user.password = "${req.body.password}"`,
       (err, result) => {
-        if (err || (result?.length && result.length === 0 )) {
+        if (err || !result) {
           console.log("Ничего не найдено");
           res.json({ message: "Ошибка" });
         } else {
