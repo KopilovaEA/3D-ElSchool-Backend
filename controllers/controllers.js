@@ -26,7 +26,7 @@ class Controlers {
     db.query(
       `SELECT * FROM user WHERE user.email = "${req.body.email}" AND user.password = "${req.body.password}"`,
       (err, result) => {
-        if (err || !result) {
+        if (err || !result || (result && result.length === 0)) {
           console.log("Ничего не найдено");
           res.json({ message: "Ошибка" });
         } else {
@@ -41,7 +41,7 @@ class Controlers {
     db.query(
       `SELECT * FROM user WHERE user.email = "${req.body.email}"`,
       (err, result) => {
-        if (err || (result?.length && result.length !== 0 )) {
+        if (err || (result && result.length !== 0 )) {
           console.log("Такой пользователь уже существует");
           res.json({ message: "Ошибка" });
         } else {
@@ -93,9 +93,7 @@ class Controlers {
     db.query(
       `SELECT * FROM user WHERE user.id = "${req.body.id}"`,
       (err, result) => {
-        console.log(err);
-        console.log(result);
-        if (err || !result) {
+        if (err || !result || (result && result.length === 0)) {
           console.log("Ничего не найдено");
           res.json({ message: "Ошибка" });
         } else {
