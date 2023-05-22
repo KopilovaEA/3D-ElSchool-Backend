@@ -93,9 +93,9 @@ class Controlers {
     db.query(
       `SELECT * FROM user WHERE user.id = "${req.body.id}"`,
       (err, result) => {
+        console.log(err);
+        console.log(result);
         if (err || !result) {
-          console.log(err);
-          console.log(result);
           console.log("Ничего не найдено");
           res.json({ message: "Ошибка" });
         } else {
